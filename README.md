@@ -11,6 +11,16 @@ The opinionated FastShell framework. Built for the modern developer. For teams a
 * HomePage: [Fastshell](https://HosseinKarami.github.io/fastshell)
 * Using Latest JQuery and Modernizer + LESS instead of SCSS
 
+## Important
+
+* install nodejs
+* install bower: npm install -g bower
+* clone the repo
+* \> npm install
+* \> bower install
+* \> gulp
+
+
 ## License
 
 #### The MIT License (MIT)
