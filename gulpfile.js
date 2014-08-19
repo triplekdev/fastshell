@@ -9,6 +9,7 @@ var gulp = require('gulp'),
   minifyCSS = require('gulp-minify-css'),
   vendor = require('gulp-concat-vendor'),
   rimraf = require('gulp-rimraf'),
+  gutil = require('gulp-util'),
   package = require('./package.json');
 
 // Script Headers
