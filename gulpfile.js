@@ -86,16 +86,22 @@ gulp.task('js', ['clean:js'], function () {
 //
 gulp.task('vendor', function () {
   gulp.src([
-      'src/vendor/*',
-      'src/vendor/modernizr/modernizr.js'
+        'src/vendor/*',
+        'src/vendor/modernizr/modernizr.js'
     ])
     .pipe(vendor('vendor.min.js'))
     .pipe(uglify())
+    .pipe(header(banner, {
+      package: package
+    }))
     .pipe(gulp.dest('app/assets/js'))
-    .pipe(browserSync.reload({
-      stream: true,
-      once: true
-    }));
+    .on('error', gutil.log);
+
+  // Bootstrap Fonts
+  gulp.src([
+      'src/vendor/bootstrap/fonts/**/*.{ttf,woff,eot,svg}'
+    ])
+    .pipe(gulp.dest('app/assets/fonts'));
 });
 
 // Server

@@ -1,0 +1,17 @@
+{
+  "name": "fastshell-less",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "./src/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": "2.8.x",
+    "jquery": "~2.1.1",
+    "bootstrap": "3.2.x"
+  }
+}
