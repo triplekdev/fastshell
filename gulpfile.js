@@ -101,7 +101,8 @@ gulp.task('vendor', function () {
   gulp.src([
       'src/vendor/bootstrap/fonts/**/*.{ttf,woff,eot,svg}'
     ])
-    .pipe(gulp.dest('app/assets/fonts'));
+    .pipe(gulp.dest('app/assets/fonts'))
+    .on('error', gutil.log);
 });
 
 // Server
