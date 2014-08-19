@@ -51,9 +51,7 @@ gulp.task('clean:css', function () {
 //
 gulp.task('css', ['clean:css'], function () {
   gulp.src('src/less/app.less')
-    .pipe(less({
-      paths: ['src/less/includes']
-    }))
+    .pipe(less().on('error', gutil.log))
     .pipe(minifyCSS())
     .pipe(header(banner, {
       package: package
@@ -103,6 +101,7 @@ gulp.task('vendor', function () {
 //
 gulp.task('browser-sync', function () {
   browserSync.init(null, {
+    port: 8888,
     server: {
       baseDir: "app"
     }
