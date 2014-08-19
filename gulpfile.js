@@ -1,5 +1,5 @@
 var gulp = require('gulp'),
-    sass = require('gulp-sass'),
+    less = require('gulp-less'),
     browserSync = require('browser-sync'),
     autoprefixer = require('gulp-autoprefixer'),
     uglify = require('gulp-uglify'),
@@ -7,6 +7,7 @@ var gulp = require('gulp'),
     header  = require('gulp-header'),
     rename = require('gulp-rename'),
     minifyCSS = require('gulp-minify-css'),
+    concatVendor = require('gulp-concat-vendor');
     package = require('./package.json');
 
 
@@ -22,9 +23,8 @@ var banner = [
   '\n'
 ].join('');
 
-gulp.task('css', function () {
-    return gulp.src('src/scss/style.scss')
-    .pipe(sass({errLogToConsole: true}))
+gulp.task('less', function () {
+    return gulp.src('src/less/app.less')
     .pipe(autoprefixer('last 4 version'))
     .pipe(gulp.dest('app/assets/css'))
     .pipe(minifyCSS())
@@ -35,16 +35,22 @@ gulp.task('css', function () {
 });
 
 gulp.task('js',function(){
-  gulp.src('src/js/scripts.js')
+  gulp.src('src/js/app.js')
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
     .pipe(header(banner, { package : package }))
-    .pipe(gulp.dest('app/assets/js'))
+    .pipe(gulp.dest('app'))
     .pipe(uglify())
     .pipe(header(banner, { package : package }))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulp.dest('app/assets/js'))
+    .pipe(gulp.dest('app'))
     .pipe(browserSync.reload({stream:true, once: true}));
+});
+
+gul.task('vendor-js',function(){
+  gulp.src(['src/vendor/*'])
+    .pipe(vendor('vendor.js'))
+    .pipe(gulp.dest('app'));
 });
 
 gulp.task('browser-sync', function() {
@@ -54,12 +60,14 @@ gulp.task('browser-sync', function() {
         }
     });
 });
+
 gulp.task('bs-reload', function () {
     browserSync.reload();
 });
 
-gulp.task('default', ['css', 'js', 'browser-sync'], function () {
-    gulp.watch("src/scss/*/*.scss", ['css']);
+gulp.task('default', ['less', 'vendor-js', 'js', 'browser-sync'], function () {
+    gulp.watch("src/less/*/*.less", ['less']);
+    gulp.watch("src/vendor/*.js", ['vendor-js']);
     gulp.watch("src/js/*.js", ['js']);
     gulp.watch("app/*.html", ['bs-reload']);
 });
