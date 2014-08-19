@@ -47,7 +47,7 @@ gulp.task('js',function(){
     .pipe(browserSync.reload({stream:true, once: true}));
 });
 
-gul.task('vendor-js',function(){
+gulp.task('vendor-js',function(){
   gulp.src(['src/vendor/*'])
     .pipe(vendor('vendor.js'))
     .pipe(gulp.dest('app'));
