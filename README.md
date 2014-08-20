@@ -17,7 +17,6 @@ The opinionated FastShell framework. Built for the modern developer. For teams a
 * install bower: npm install -g bower
 * clone the repo
 * \\> npm install
-* \\> bower install
 * \\> gulp
 
 
