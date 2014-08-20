@@ -94,7 +94,7 @@ gulp.task('js', ['clean:js'], function () {
 //
 gulp.task('vendor', function () {
   if ('dependencies' in bower) {
-    if (bower.dependencies.length > 0) {
+    if (Object.keys(bower.dependencies).length > 0) {
       gulp.src([
         'src/vendor/*'
         //'src/vendor/modernizr/modernizr.js'
