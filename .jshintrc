@@ -20,7 +20,5 @@
   "trailing": false,
   "smarttabs": true,
   "globals" : {
-    "jQuery": true,
-    "Modernizr": true
   }
 }

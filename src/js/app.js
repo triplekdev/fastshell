@@ -1,9 +1,2 @@
-(function ($, window, document, undefined) {
-
-  'use strict';
-
-  $(function () {
-    // FastShell
-  });
-
-})(jQuery, window, document);
+var sum = require('./sum.js');
+console.log(sum(50,05));

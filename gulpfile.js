@@ -10,6 +10,10 @@ var gulp = require('gulp'),
   vendor = require('gulp-concat-vendor'),
   rimraf = require('gulp-rimraf'),
   gutil = require('gulp-util'),
+  source = require('vinyl-source-stream'),
+  browserify = require('browserify'),
+  buffer = require('gulp-buffer'),
+  fs = require('fs')
   package = require('./package.json');
 
 // Script Headers
@@ -67,14 +71,17 @@ gulp.task('css', ['clean:css'], function () {
 // Compile Javascripts
 //
 gulp.task('js', ['clean:js'], function () {
-  gulp.src('src/js/app.js')
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('default'))
+  var b = browserify({
+    entries: "./src/js/app.js"
+  });
+
+  b.bundle().on('error', gutil.log)
+    .pipe(source("app.min.js"))
+    .pipe(buffer())
     .pipe(uglify())
     .pipe(header(banner, {
       package: package
     }))
-    .pipe(rename('app.min.js'))
     .pipe(gulp.dest('app/assets/js'))
     .pipe(browserSync.reload({
       stream: true,
@@ -85,31 +92,47 @@ gulp.task('js', ['clean:js'], function () {
 // Concat Vendor Scripts
 //
 gulp.task('vendor', function () {
-  gulp.src([
-        'src/vendor/*',
-        'src/vendor/modernizr/modernizr.js'
+  if (fs.existsSync('src/vendor') && fs.readdirSync('src/vendor/').length >= 1) {
+    gulp.src([
+        'src/vendor/*'
+        //'src/vendor/modernizr/modernizr.js'
     ])
-    .pipe(vendor('vendor.min.js'))
+      .pipe(vendor('vendor.min.js'))
+      .pipe(uglify())
+      .pipe(header(banner, {
+        package: package
+      }))
+      .pipe(gulp.dest('app/assets/js'))
+      .on('error', gutil.log);
+  }
+
+  // Bootstrap Fonts
+  // gulp.src([
+  //     'src/vendor/bootstrap/fonts/**/*.{ttf,woff,eot,svg}'
+  //   ])
+  //   .pipe(gulp.dest('app/assets/fonts'))
+  //   .on('error', gutil.log);
+});
+
+// Concat All
+//
+/*gulp.task('all', function () {
+  gulp.src([
+      'app/assets/js/vendor.min.js', 'app/assets/js/app.min.js'
+    ])
+    .pipe(vendor('bundle.js'))
     .pipe(uglify())
     .pipe(header(banner, {
       package: package
     }))
     .pipe(gulp.dest('app/assets/js'))
     .on('error', gutil.log);
-
-  // Bootstrap Fonts
-  gulp.src([
-      'src/vendor/bootstrap/fonts/**/*.{ttf,woff,eot,svg}'
-    ])
-    .pipe(gulp.dest('app/assets/fonts'))
-    .on('error', gutil.log);
-});
+});*/
 
 // Server
 //
 gulp.task('browser-sync', function () {
   browserSync.init(null, {
-    port: 8888,
     server: {
       baseDir: "app"
     }

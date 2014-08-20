@@ -1,5 +1,5 @@
 {
-  "name": "fastshell-less",
+  "name": "fastshell",
   "private": true,
   "ignore": [
     "**/.*",
@@ -8,10 +8,5 @@
     "./src/vendor",
     "test",
     "tests"
-  ],
-  "dependencies": {
-    "modernizr": "2.8.x",
-    "jquery": "~2.1.1",
-    "bootstrap": "3.2.x"
-  }
+  ]
 }

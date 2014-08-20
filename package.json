@@ -1,5 +1,5 @@
 {
-  "name": "fastshell-less",
+  "name": "fastshell",
   "title": "Frontend Application ~Fastshell",
   "author": "Kevy <tkralphdev@gmail.com>",
   "url": "https://github.com/triplekdev/fastshell",
@@ -7,20 +7,23 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "http://github.com/HosseinKarami/fastshell.git"
+    "url": "https://github.com/triplekdev/fastshell"
   },
   "devDependencies": {
     "browser-sync": "^1.3.0",
-    "gulp": ">=3.8.6",
-    "gulp-util": ">=3.0.0",
-    "gulp-rimraf": ">=0.1.0",
-    "gulp-autoprefixer": ">=0.0.8",
-    "gulp-header": ">=1.0.5",
-    "gulp-jshint": ">=1.7.1",
-    "gulp-minify-css": ">=0.3.7",
-    "gulp-rename": ">=1.2.0",
-    "gulp-less": ">=1.3.5",
-    "gulp-uglify": ">=0.3.1",
-    "gulp-concat-vendor": ">=0.0.3"
+    "browserify": "^5.10.0",
+    "gulp": "^3.8.6",
+    "gulp-autoprefixer": "^0.0.8",
+    "gulp-buffer": "0.0.2",
+    "gulp-concat-vendor": "^0.0.3",
+    "gulp-header": "^1.0.5",
+    "gulp-jshint": "^1.7.1",
+    "gulp-less": "^1.3.5",
+    "gulp-minify-css": "^0.3.7",
+    "gulp-rename": "^1.2.0",
+    "gulp-rimraf": "^0.1.0",
+    "gulp-uglify": "^0.3.1",
+    "gulp-util": "^3.0.0",
+    "vinyl-source-stream": "^0.1.1"
   }
 }
