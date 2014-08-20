@@ -13,8 +13,9 @@ var gulp = require('gulp'),
   source = require('vinyl-source-stream'),
   browserify = require('browserify'),
   buffer = require('gulp-buffer'),
-  fs = require('fs')
-  package = require('./package.json');
+  fs = require('fs'),
+  package = require('./package.json')
+  bower = require('./bower.json');
 
 // Script Headers
 //
@@ -92,18 +93,20 @@ gulp.task('js', ['clean:js'], function () {
 // Concat Vendor Scripts
 //
 gulp.task('vendor', function () {
-  if (fs.existsSync('src/vendor') && fs.readdirSync('src/vendor/').length >= 1) {
-    gulp.src([
+  if ('dependencies' in bower) {
+    if (bower.dependencies.length > 0) {
+      gulp.src([
         'src/vendor/*'
         //'src/vendor/modernizr/modernizr.js'
-    ])
-      .pipe(vendor('vendor.min.js'))
-      .pipe(uglify())
-      .pipe(header(banner, {
-        package: package
-      }))
-      .pipe(gulp.dest('app/assets/js'))
-      .on('error', gutil.log);
+        ])
+        .pipe(vendor('vendor.min.js'))
+        .pipe(uglify())
+        .pipe(header(banner, {
+          package: package
+        }))
+        .pipe(gulp.dest('app/assets/js'))
+        .on('error', gutil.log);
+    }
   }
 
   // Bootstrap Fonts
