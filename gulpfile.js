@@ -117,21 +117,6 @@ gulp.task('vendor', function () {
   //   .on('error', gutil.log);
 });
 
-// Concat All
-//
-/*gulp.task('all', function () {
-  gulp.src([
-      'app/assets/js/vendor.min.js', 'app/assets/js/app.min.js'
-    ])
-    .pipe(vendor('bundle.js'))
-    .pipe(uglify())
-    .pipe(header(banner, {
-      package: package
-    }))
-    .pipe(gulp.dest('app/assets/js'))
-    .on('error', gutil.log);
-});*/
-
 // Server
 //
 gulp.task('browser-sync', function () {
