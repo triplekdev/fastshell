@@ -14,7 +14,8 @@ var gulp = require('gulp'),
   browserify = require('browserify'),
   buffer = require('gulp-buffer'),
   fs = require('fs'),
-  package = require('./package.json')
+  concat = require('gulp-concat'),
+  package = require('./package.json'),
   bower = require('./bower.json');
 
 // Script Headers
