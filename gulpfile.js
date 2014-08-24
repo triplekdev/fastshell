@@ -139,7 +139,7 @@ gulp.task('vendor', function () {
 });
 
 // Bundle Vendor + App
-gulp.task('bundled', ['vendor', 'js'], function () {
+gulp.task('bundled', ['js'], function () {
     return gulp.src(['./dist/vendor*.js', './dist/app*.js'])
         .pipe(concat('bundled.min.js'))
         .pipe(uglify())
