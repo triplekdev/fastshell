@@ -104,7 +104,7 @@ gulp.task('favicon', ['clean'], function () {
 });
 
 // Compile App JS
-gulp.task('js', ['clean', 'vendor'], function () {
+gulp.task('js', ['vendor'], function () {
     // App scripts
     var b = browserify({
         entries: "./src/js/bootstrap.js"
@@ -124,7 +124,7 @@ gulp.task('js', ['clean', 'vendor'], function () {
 });
 
 // Vendors
-gulp.task('vendor', ['clean'], function () {
+gulp.task('vendor', function () {
     // Vendor scripts
     return gulp.src(vendor_scripts)
         .pipe(concat('vendor.min.js'))
@@ -160,9 +160,9 @@ gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'bundled', 'htm
 
     gulp.watch('./src/fonts/**/*', ['fonts']);
     gulp.watch('./src/images/**/*', ['images']);
+    gulp.watch('./src/less/**/*', ['less']);
     gulp.watch('./src/js/**/*', ['js']);
-    gulp.watch('./src/less/**/*', ['bundled']);
-    gulp.watch('./src/vendor/**/*', ['bundled']);
+    gulp.watch('./src/vendor/**/*', ['vendor']);
 
     console.log('\nWatching `src/` for changes `dist/`\n');
 });
