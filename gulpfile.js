@@ -62,15 +62,13 @@ gulp.task('clean', function () {
 // Copy all static images
 gulp.task('images', ['clean'], function () {
     return gulp.src(image_paths)
-        .pipe(gulp.dest('./dist/images/'))
-        .pipe(browserSync.reload({once: true}));
+        .pipe(gulp.dest('./dist/images/'));
 });
 
 // Copy all static fonts
 gulp.task('fonts', ['clean'], function () {
     return gulp.src(font_paths)
-        .pipe(gulp.dest('./dist/fonts/'))
-        .pipe(browserSync.reload({once: true}));
+        .pipe(gulp.dest('./dist/fonts/'));
 });
 
 // Compile all .less files, producing .css
