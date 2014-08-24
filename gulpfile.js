@@ -154,7 +154,7 @@ gulp.task('bundled', ['vendor', 'js'], function () {
 gulp.task('browser-sync', function() {
     browserSync.init(null, {
         server: {
-            baseDir: "app"
+            baseDir: "./dist"
         }
     });
 });
