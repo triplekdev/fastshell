@@ -104,6 +104,18 @@ gulp.task('favicon', ['clean'], function () {
         .pipe(gulp.dest('./dist/'));
 });
 
+// Vendors
+gulp.task('vendor', function () {
+    // Vendor scripts
+    return gulp.src(vendor_scripts)
+        .pipe(concat('vendor.min.js'))
+        .pipe(uglify())
+        .pipe(header(banner, {
+            package: package
+        }))
+        .pipe(gulp.dest('./dist'));
+});
+
 // Compile App JS
 gulp.task('js', ['vendor'], function () {
     // App scripts
@@ -121,21 +133,7 @@ gulp.task('js', ['vendor'], function () {
         .pipe(header(banner, {
             package: package
         }))
-        .pipe(gulp.dest('./dist'))
-        .pipe(browserSync.reload({stream:true, once: true}));
-});
-
-// Vendors
-gulp.task('vendor', function () {
-    // Vendor scripts
-    return gulp.src(vendor_scripts)
-        .pipe(concat('vendor.min.js'))
-        .pipe(uglify())
-        .pipe(header(banner, {
-            package: package
-        }))
-        .pipe(gulp.dest('./dist/'))
-        .pipe(browserSync.reload({stream:true, once: true}));
+        .pipe(gulp.dest('./dist'));
 });
 
 // Bundle Vendor + App
