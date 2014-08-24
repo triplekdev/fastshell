@@ -156,6 +156,13 @@ gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'bundled', 'htm
         }))
         .pipe(gulp.dest('./final'));
 
-    callback();
     console.log('\nPlaced optimized files in `dist/`\n');
+
+    gulp.watch('./src/fonts/**/*', ['fonts']);
+    gulp.watch('./src/images/**/*', ['images']);
+    gulp.watch('./src/js/**/*', ['js']);
+    gulp.watch('./src/less/**/*', ['bundled']);
+    gulp.watch('./src/vendor/**/*', ['bundled']);
+
+    console.log('\nWatching `src/` for changes `dist/`\n');
 });
