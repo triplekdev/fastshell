@@ -1,25 +1,28 @@
 var gulp = require('gulp'),
-  less = require('gulp-less'),
-  browserSync = require('browser-sync'),
-  autoprefixer = require('gulp-autoprefixer'),
-  uglify = require('gulp-uglify'),
-  jshint = require('gulp-jshint'),
-  header = require('gulp-header'),
-  rename = require('gulp-rename'),
-  minifyCSS = require('gulp-minify-css'),
-  vendor = require('gulp-concat-vendor'),
-  rimraf = require('gulp-rimraf'),
-  gutil = require('gulp-util'),
-  source = require('vinyl-source-stream'),
-  browserify = require('browserify'),
-  buffer = require('gulp-buffer'),
-  fs = require('fs'),
-  concat = require('gulp-concat'),
-  package = require('./package.json'),
-  bower = require('./bower.json');
+    less = require('gulp-less'),
+    browserSync = require('browser-sync'),
+    autoprefixer = require('gulp-autoprefixer'),
+    clean = require('gulp-clean'),
+    uglify = require('gulp-uglify'),
+    jshint = require('gulp-jshint'),
+    header = require('gulp-header'),
+    rename = require('gulp-rename'),
+    minifyCSS = require('gulp-minify-css'),
+    vendor = require('gulp-concat-vendor'),
+    rimraf = require('gulp-rimraf'),
+    gutil = require('gulp-util'),
+    source = require('vinyl-source-stream'),
+    browserify = require('browserify'),
+    buffer = require('gulp-buffer'),
+    fs = require('fs'),
+    concat = require('gulp-concat'),
+    replace = require('gulp-replace'),
+    htmlreplace = require('gulp-html-replace'),
+    package = require('./package.json'),
+    revall = require("gulp-rev-all"),
+    bower = require('./bower.json');
 
 // Script Headers
-//
 var banner = [
   '/*!\n' +
   ' * <%= package.name %>\n' +
@@ -27,118 +30,130 @@ var banner = [
   ' * <%= package.url %>\n' +
   ' * @author <%= package.author %>\n' +
   ' * @version <%= package.version %>\n' +
-  ' * Copyright ' + new Date().getFullYear() + '. <%= package.license %> licensed.\n' +
+  ' * Copyright ' + new Date()
+    .getFullYear() + '. <%= package.license %> licensed.\n' +
   ' */',
   '\n'
 ].join('');
 
-// Clean Javascripts
-//
-gulp.task('clean:js', function () {
-  gulp.src('app/assets/js/*', {
-    read: false
-  })
-    .pipe(rimraf({
-      force: true
-    }));
+// Vendor Scripts
+var vendor_scripts = [
+    './src/vendor/jquery/dist/jquery.min.js'
+];
+
+// Font paths
+var font_paths = [
+    './src/fonts/**/*.*'
+];
+
+// Image paths
+var image_paths = [
+    './src/images/**/*.*'
+];
+
+// Clean
+gulp.task('clean', function () {
+    return gulp.src(['./dist', './final'], {
+        read: false
+    })
+        .pipe(clean());
 });
 
-// Clean Stylesheets
-//
-gulp.task('clean:css', function () {
-  gulp.src('app/assets/css/*', {
-    read: false
-  })
-    .pipe(rimraf({
-      force: true
-    }));
+// Copy all static images
+gulp.task('images', ['clean'], function () {
+    return gulp.src(image_paths)
+        .pipe(gulp.dest('./dist/images/'));
 });
 
-// Compile Less
-//
-gulp.task('css', ['clean:css'], function () {
-  gulp.src('src/less/app.less')
-    .pipe(less().on('error', gutil.log))
-    .pipe(minifyCSS())
-    .pipe(header(banner, {
-      package: package
-    }))
-    .pipe(rename('app.min.css'))
-    .pipe(gulp.dest('app/assets/css'))
-    .pipe(browserSync.reload({
-      stream: true
-    }));
+// Copy all static fonts
+gulp.task('fonts', ['clean'], function () {
+    return gulp.src(font_paths)
+        .pipe(gulp.dest('./dist/fonts/'));
 });
 
-// Compile Javascripts
-//
-gulp.task('js', ['clean:js'], function () {
-  var b = browserify({
-    entries: "./src/js/app.js"
-  });
-
-  b.bundle().on('error', gutil.log)
-    .pipe(source("app.min.js"))
-    .pipe(buffer())
-    .pipe(uglify())
-    .pipe(header(banner, {
-      package: package
-    }))
-    .pipe(gulp.dest('app/assets/js'))
-    .pipe(browserSync.reload({
-      stream: true,
-      once: true
-    }));
+// Compile all .less files, producing .css
+gulp.task('less', ['clean'], function () {
+    return gulp.src('./src/less/app.less')
+        .pipe(replace('url(../images/', 'url(images/'))
+        .pipe(replace('url(../fonts/', 'url(fonts/'))
+        .pipe(less())
+        .pipe(replace("../../", ""))
+        .pipe(minifyCSS())
+        .pipe(header(banner, {
+            package: package
+        }))
+        .pipe(rename('app.css'))
+        .pipe(gulp.dest('./dist/'));
 });
 
-// Concat Vendor Scripts
-//
-gulp.task('vendor', function () {
-  if ('dependencies' in bower) {
-    if (Object.keys(bower.dependencies).length > 0) {
-      gulp.src([
-        'src/vendor/*'
-        //'src/vendor/modernizr/modernizr.js'
-        ])
-        .pipe(vendor('vendor.min.js'))
+// HTML
+gulp.task('html', ['clean'], function () {
+    return gulp.src('./src/index.html')
+        .pipe(htmlreplace({
+            'css': 'app.css',
+            'js': 'bundled.min.js',
+            'debug': ''
+        }))
+        .pipe(gulp.dest('./dist/'));
+});
+
+// Favico
+gulp.task('favicon', ['clean'], function () {
+    return gulp.src('./src/favicon.ico')
+        .pipe(gulp.dest('./dist/'));
+});
+
+// Compile App JS
+gulp.task('js', ['clean', 'vendor'], function () {
+    // App scripts
+    var b = browserify({
+        entries: "./src/js/bootstrap.js"
+    });
+
+    return b.bundle()
+        .on('error', gutil.log)
+        .pipe(source("app.min.js"))
+        .pipe(buffer())
         .pipe(uglify())
         .pipe(header(banner, {
-          package: package
+            package: package
         }))
-        .pipe(gulp.dest('app/assets/js'))
-        .on('error', gutil.log);
-    }
-  }
-
-  // Bootstrap Fonts
-  // gulp.src([
-  //     'src/vendor/bootstrap/fonts/**/*.{ttf,woff,eot,svg}'
-  //   ])
-  //   .pipe(gulp.dest('app/assets/fonts'))
-  //   .on('error', gutil.log);
+        .pipe(gulp.dest('./dist'))
 });
 
-// Server
-//
-gulp.task('browser-sync', function () {
-  browserSync.init(null, {
-    server: {
-      baseDir: "app"
-    }
-  });
+// Vendors
+gulp.task('vendor', ['clean'], function () {
+    // Vendor scripts
+    return gulp.src(vendor_scripts)
+        .pipe(concat('vendor.min.js'))
+        .pipe(uglify())
+        .pipe(header(banner, {
+            package: package
+        }))
+        .pipe(gulp.dest('./dist/'))
 });
 
-// Reloading browser
-//
-gulp.task('bs-reload', function () {
-  browserSync.reload();
+// Bundle Vendor + App
+gulp.task('bundled', ['vendor', 'js'], function () {
+    return gulp.src(['./dist/vendor*.js', './dist/app*.js'])
+        .pipe(concat('bundled.min.js'))
+        .pipe(uglify())
+        .pipe(header(banner, {
+            package: package
+        }))
+        .pipe(gulp.dest('./dist/'));
 });
 
 // Watchers
-//
-gulp.task('default', ['css', 'vendor', 'js', 'browser-sync'], function () {
-  gulp.watch("src/less/**/*.less", ['css']);
-  gulp.watch("src/vendor/**/*.js", ['vendor']);
-  gulp.watch("src/js/*.js", ['js']);
-  gulp.watch("app/*.html", ['bs-reload']);
+gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'bundled', 'html', 'favicon'], function (callback) {
+
+    // Revisions
+    gulp.src('./dist/**/*.*')
+        .pipe(revall({
+            ignore: [/^\/favicon.ico$/g, '.html']
+        }))
+        .pipe(gulp.dest('./final'));
+
+    callback();
+    console.log('\nPlaced optimized files in `dist/`\n');
 });
