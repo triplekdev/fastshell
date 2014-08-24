@@ -110,6 +110,8 @@ gulp.task('js', ['clean', 'vendor'], function () {
         entries: "./src/js/bootstrap.js"
     });
 
+    b.transform('brfs');
+
     return b.bundle()
         .on('error', gutil.log)
         .pipe(source("app.min.js"))
