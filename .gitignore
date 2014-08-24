@@ -1,8 +1,3 @@
-# FastShell
-# https://HosseinKarami.github.io/fastshell
-# @author Hossein Karami
-
-
 ## Node.js
 lib-cov
 *.seed
@@ -23,7 +18,9 @@ src/vendor
 
 ## Builds
 dist
+dist/*
 final
+final/*
 
 ## Sass
 .sass-cache
