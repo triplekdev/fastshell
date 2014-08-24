@@ -164,7 +164,7 @@ gulp.task('bs-reload', function () {
 });
 
 // Watchers
-gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'bundled', 'html', 'favicon', 'bs-reload'], function (callback) {
+gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'bundled', 'html', 'favicon', 'browser-sync'], function (callback) {
 
     // Revisions
     gulp.src('./dist/**/*.*')
