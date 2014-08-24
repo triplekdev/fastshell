@@ -83,8 +83,7 @@ gulp.task('less', ['clean'], function () {
             package: package
         }))
         .pipe(rename('app.css'))
-        .pipe(gulp.dest('./dist/'))
-        .pipe(browserSync.reload({stream:true, once: true}));
+        .pipe(gulp.dest('./dist/'));
 });
 
 // HTML
@@ -92,7 +91,8 @@ gulp.task('html', ['clean'], function () {
     return gulp.src('./src/index.html')
         .pipe(htmlreplace({
             'css': 'app.css',
-            'js': 'bundled.min.js',
+            'vendor': 'vendor.min.js',
+            'js': 'app.min.js',
             'debug': ''
         }))
         .pipe(gulp.dest('./dist/'));
@@ -117,7 +117,7 @@ gulp.task('vendor', function () {
 });
 
 // Compile App JS
-gulp.task('js', ['vendor'], function () {
+gulp.task('js', function () {
     // App scripts
     var b = browserify({
         entries: "./src/js/bootstrap.js"
@@ -136,49 +136,13 @@ gulp.task('js', ['vendor'], function () {
         .pipe(gulp.dest('./dist'));
 });
 
-// Bundle Vendor + App
-gulp.task('bundled', ['js'], function () {
-    return gulp.src(['./dist/vendor*.js', './dist/app*.js'])
-        .pipe(concat('bundled.min.js'))
-        .pipe(uglify())
-        .pipe(header(banner, {
-            package: package
-        }))
-        .pipe(gulp.dest('./dist/'))
-        .pipe(browserSync.reload({stream:true, once: true}));
-});
-
-// Browser-sync
-gulp.task('browser-sync', function() {
-    browserSync.init(null, {
-        server: {
-            baseDir: "./dist"
-        }
-    });
-});
-
-gulp.task('bs-reload', function () {
-    browserSync.reload();
-});
-
 // Watchers
-gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'bundled', 'html', 'favicon', 'browser-sync'], function (callback) {
-
+gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'html', 'favicon'], function (callback) {
     // Revisions
     gulp.src('./dist/**/*.*')
         .pipe(revall({
             ignore: [/^\/favicon.ico$/g, '.html']
         }))
         .pipe(gulp.dest('./final'));
-
     console.log('\nPlaced optimized files in `dist/`\n');
-
-    gulp.watch('./src/fonts/**/*', ['fonts']);
-    gulp.watch('./src/images/**/*', ['images']);
-    gulp.watch('./src/less/**/*.less', ['less']);
-    gulp.watch('./src/js/**/*.js', ['bundled']);
-    gulp.watch('./src/vendor/**/*.js', ['bundled']);
-    gulp.watch('./src/**/*.html', ['bs-reload']);
-
-    console.log('\nWatching `src/` for changes `dist/`\n');
 });
