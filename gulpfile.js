@@ -137,7 +137,7 @@ gulp.task('js', function () {
 });
 
 // Watchers
-gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'html', 'favicon'], function (callback) {
+gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'html', 'favicon'], function () {
     // Revisions
     gulp.src('./dist/**/*.*')
         .pipe(revall({
@@ -145,7 +145,15 @@ gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'html', 'favico
         }))
         .pipe(gulp.dest('./final'));
 
-    callback();
-
     console.log('\nPlaced optimized files in `dist/`\n');
+
+    gulp.watch('./src/fonts/**/*', ['fonts']);
+    gulp.watch('./src/images/**/*', ['images']);
+    gulp.watch('./src/less/**/*', ['less']);
+    gulp.watch('./src/vendor/**/*', ['vendor']);
+    gulp.watch('./src/js/**/*', ['js']);
+    gulp.watch('./src/**/*.html', ['html']);
+    gulp.watch('./src/**/*.ico', ['favicon']);
+
+    console.log('\Watching files in `src/`\n');
 });
