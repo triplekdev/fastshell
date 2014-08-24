@@ -144,5 +144,8 @@ gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'html', 'favico
             ignore: [/^\/favicon.ico$/g, '.html']
         }))
         .pipe(gulp.dest('./final'));
+
+    callback();
+
     console.log('\nPlaced optimized files in `dist/`\n');
 });
