@@ -95,8 +95,7 @@ gulp.task('html', ['clean'], function () {
             'js': 'bundled.min.js',
             'debug': ''
         }))
-        .pipe(gulp.dest('./dist/'))
-        .pipe(browserSync.reload({once: true}));
+        .pipe(gulp.dest('./dist/'));
 });
 
 // Favico
