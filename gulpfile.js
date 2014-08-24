@@ -60,19 +60,19 @@ gulp.task('clean', function () {
 });
 
 // Copy all static images
-gulp.task('images', ['clean'], function () {
+gulp.task('images', function () {
     return gulp.src(image_paths)
         .pipe(gulp.dest('./dist/images/'));
 });
 
 // Copy all static fonts
-gulp.task('fonts', ['clean'], function () {
+gulp.task('fonts', function () {
     return gulp.src(font_paths)
         .pipe(gulp.dest('./dist/fonts/'));
 });
 
 // Compile all .less files, producing .css
-gulp.task('less', ['clean'], function () {
+gulp.task('less', function () {
     return gulp.src('./src/less/app.less')
         .pipe(replace('url(../images/', 'url(images/'))
         .pipe(replace('url(../fonts/', 'url(fonts/'))
@@ -87,7 +87,7 @@ gulp.task('less', ['clean'], function () {
 });
 
 // HTML
-gulp.task('html', ['clean'], function () {
+gulp.task('html', function () {
     return gulp.src('./src/index.html')
         .pipe(htmlreplace({
             'css': 'app.css',
@@ -99,7 +99,7 @@ gulp.task('html', ['clean'], function () {
 });
 
 // Favico
-gulp.task('favicon', ['clean'], function () {
+gulp.task('favicon', function () {
     return gulp.src('./src/favicon.ico')
         .pipe(gulp.dest('./dist/'));
 });
