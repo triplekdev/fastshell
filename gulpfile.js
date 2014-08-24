@@ -178,8 +178,8 @@ gulp.task('default', ['fonts', 'images', 'less', 'vendor', 'js', 'bundled', 'htm
     gulp.watch('./src/fonts/**/*', ['fonts']);
     gulp.watch('./src/images/**/*', ['images']);
     gulp.watch('./src/less/**/*.less', ['less']);
-    gulp.watch('./src/js/**/*.js', ['js']);
-    gulp.watch('./src/vendor/**/*.js', ['vendor']);
+    gulp.watch('./src/js/**/*.js', ['bundled']);
+    gulp.watch('./src/vendor/**/*.js', ['bundled']);
     gulp.watch('./src/**/*.html', ['bs-reload']);
 
     console.log('\nWatching `src/` for changes `dist/`\n');
